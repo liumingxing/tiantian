@@ -48,6 +48,16 @@ provider:
           - - "arn:aws:s3:::"
             - "Ref" : "ServerlessDeploymentBucket"
             - "/*"
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:s3:::"
+            - "Ref" : "addressresource"
+            - "/*"
 
 # you can define service wide environment variables here
 #  environment:
@@ -106,7 +116,12 @@ functions:
 #    Define function environment variables here
 #    environment:
 #      variable2: value2
-
+resources:
+  Resources:
+    addressresource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: address-resource
 # you can add CloudFormation resource templates here
 # resources:
 #   Resources:

@@ -21,8 +21,18 @@ def hello(event:, context:)
 
     resp = s3.get_object(bucket: bucket_name, key: object_key)
     streams = resp.body.read.split("\n")
-  else                                                                                      #API GateWay驱动
-    streams = event["body"].split("\n")
+  elsif event["path"] == "/hello"                               #API GateWay驱动
+    if event["body"]
+        streams = event["body"].split("\n")
+    else
+        return {
+              statusCode: 200,
+              body: {
+                code: -1,
+                message: "wrong_format"
+              }.to_json
+            }
+    end
   end
   logger.info(streams)
   if right_format?(streams)

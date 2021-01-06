@@ -70,6 +70,7 @@ class HelloWorldTest < Test::Unit::TestCase
     content = File.read('./data/address_right.csv')
     event = Hash.new
     event["body"] = content
+    event["path"] = "/hello"
     context = Hash.new
     result = hello(event: event, context: context)
     assert_match(right_result.to_json, result.to_json, 'Should match')
