@@ -18,6 +18,5 @@ sls deploy
 
 ## 单元测试
 ```bash
- ruby tests/unit/test_handler.rb -n test_lambda_handler
  ruby tests/unit/test_handler.rb
 ```
