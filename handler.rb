@@ -9,16 +9,21 @@ def hello(event:, context:)
   logger.info('## EVENT')
   logger.info(event)
   logger.info(context)
-  logger.info(event['Records'].first["s3"])
-  bucket_name = event['Records'].first["s3"]['bucket']['name']
-  object_key  = event['Records'].first['s3']['object']['key']
-  logger.info(bucket_name)
-  logger.info(object_key)
-  
-  s3 = Aws::S3::Client.new()
 
-  resp = s3.get_object(bucket: bucket_name, key: object_key)
-  streams = resp.body.read.split("\n")
+  if event['Records'] && event['Records'].first && event['Records'].first["s3"]             #S3 PUT Event驱动
+    logger.info(event['Records'].first["s3"])
+    bucket_name = event['Records'].first["s3"]['bucket']['name']
+    object_key  = event['Records'].first['s3']['object']['key']
+    logger.info(bucket_name)
+    logger.info(object_key)
+      
+    s3 = Aws::S3::Client.new()
+
+    resp = s3.get_object(bucket: bucket_name, key: object_key)
+    streams = resp.body.read.split("\n")
+  else                                                                                      #API GateWay驱动
+    streams = event["body"].split("\n")
+  end
   logger.info(streams)
   if right_format?(streams)
     dynamoDB = Aws::DynamoDB::Resource.new(region: 'us-east-2')
@@ -35,12 +40,24 @@ def hello(event:, context:)
         )
     end
 
-    {code: 0, message: "right format"}.to_json
+    {
+      statusCode: 200,
+      body: {
+        code: 0,
+        message: "right_format"
+      }.to_json
+    }
   else
     sns = Aws::SNS::Client.new(region: 'us-east-2')
     sns.publish(topic_arn: "arn:aws:sns:us-east-2:555543092407:address_put_error", message: "收到一个异常文件，敬请留意")
 
-    {code: -1, message: "wrong format"}.to_json
+    {
+      statusCode: 200,
+      body: {
+        code: -1,
+        message: "wrong_format"
+      }.to_json
+    }
   end
 end
 

@@ -31,7 +31,7 @@ provider:
 
   s3:
     bucketOne:
-      name: my-custom-bucket-name1
+      name: my-custom-bucket-name2
 
 # you can add statements to the Lambda function's IAM Role here
   iamRoleStatements:
@@ -69,9 +69,10 @@ functions:
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
     events:
-#      - httpApi:
-#          path: /users/create
-#          method: get
+      - http: PUT /hello
+      # - httpApi:
+      #     path: /csv/upload
+      #     method: put
 #      - websocket: $connect
       - s3: bucketOne
 #      - s3: bucketOne
@@ -108,11 +109,11 @@ functions:
 
 # you can add CloudFormation resource templates here
 # resources:
-#  Resources:
-#    csvbucket:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-csv-bucket
+#   Resources:
+#     bucketone:
+#       Type: AWS::S3::Bucket
+#       Properties:
+#         BucketName: my-custom-bucket-name1
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"

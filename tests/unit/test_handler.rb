@@ -48,8 +48,30 @@ class HelloWorldTest < Test::Unit::TestCase
   end
 
   def test_lambda_handler
-#     HTTParty.expects(:get).with('http://checkip.amazonaws.com/').returns(mock_response)
-    assert_equal(hello(event: event("address_right.csv"), context: ''), {code: 0, message: "right format"}.to_json)
-    assert_equal(hello(event: event("address_wrong.csv"), context: ''), {code: -1, message: "wrong format"}.to_json)
+    right_result = {
+      statusCode: 200,
+      body: {
+        code: 0,
+        message: "right_format"
+      }.to_json
+    }
+    wrong_result = {
+      statusCode: 200,
+      body: {
+        code: -1,
+        message: "wrong_format"
+      }.to_json
+    }
+    assert_equal(hello(event: event("address_right.csv"), context: ''), right_result)
+    assert_equal(hello(event: event("address_wrong.csv"), context: ''), wrong_result)
+
+
+    #测试API GateWay发送请求
+    content = File.read('./data/address_right.csv')
+    event = Hash.new
+    event["body"] = content
+    context = Hash.new
+    result = hello(event: event, context: context)
+    assert_match(right_result.to_json, result.to_json, 'Should match')
   end
 end
