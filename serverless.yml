@@ -48,16 +48,7 @@ provider:
           - - "arn:aws:s3:::"
             - "Ref" : "ServerlessDeploymentBucket"
             - "/*"
-    - Effect: "Allow"
-      Action:
-        - "s3:PutObject"
-        - "s3:GetObject"
-      Resource:
-        Fn::Join:
-          - ""
-          - - "arn:aws:s3:::"
-            - "Ref" : "addressresource"
-            - "/*"
+
 
 # you can define service wide environment variables here
 #  environment:
@@ -75,9 +66,6 @@ provider:
 functions:
   hello:
     handler: handler.hello
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
     events:
       - http: PUT /hello
       # - httpApi:
@@ -116,20 +104,3 @@ functions:
 #    Define function environment variables here
 #    environment:
 #      variable2: value2
-resources:
-  Resources:
-    addressresource:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: address-resource
-# you can add CloudFormation resource templates here
-# resources:
-#   Resources:
-#     bucketone:
-#       Type: AWS::S3::Bucket
-#       Properties:
-#         BucketName: my-custom-bucket-name1
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
