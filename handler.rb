@@ -10,7 +10,7 @@ def hello(event:, context:)
   logger.info(event)
   logger.info(context)
 
-  if event['Records'] && event['Records'].first && event['Records'].first["s3"]             #S3 PUT Event驱动
+  if event['Records'] && event['Records'].first && event['Records'].first["eventSource"] == "aws:s3"   #S3 PUT Event驱动
     logger.info(event['Records'].first["s3"])
     bucket_name = event['Records'].first["s3"]['bucket']['name']
     object_key  = event['Records'].first['s3']['object']['key']

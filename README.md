@@ -20,3 +20,9 @@ sls deploy
 ```bash
  ruby tests/unit/test_handler.rb
 ```
+
+## API Gateway测试
+代码中有判断，请求来自API Gateway 还是来自 S3
+```bash
+  curl -X PUT -T data/address_right.csv "https://sj3xdzh03m.execute-api.us-east-2.amazonaws.com/dev/hello"
+```
